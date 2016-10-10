@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #container{
+            width:400px;height:200px;
+            left:0;right:0;top:0;bottom:0;margin: auto;position: absolute;
+            background:gray;
+            /*border: 10px solid black;*/
+            overflow: hidden;
+        }
+        #container #con{width:100%;height:100%;transition: left 1s linear;
+            position:absolute;left:0;}
+        #container #con div{width:100%;height:100%;position:absolute;box-sizing: border-box;
+            padding: 60px 100px;
+        }
+        #container #con div.con1{background: #86da9a;left:0;}
+        #container #con div.con2{background: #e2db12;left:100%;}
+        #container #con div.con3{background: rgba(255, 249, 13, 0.32);left:200%;}
+        span{font-size: 4em;  }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="con">
+            <div class="con1"><span>第一页</span></div>
+            <div class="con2"><span>第二页</span></div>
+            <div class="con3"><span>第三页</span></div>
+        </div>
+    </div>
+    <button id="left">left</button>
+    <button id="right">right</button>
+<script>
+    var left=document.getElementById("left");
+    var right=document.getElementById("right");
+    var con=document.getElementById("con");
+    var cons=con.getElementsByTagName("div");
+    var divs=Array.prototype.slice.call(cons,0);
+    var leftV=0;
+    window.onload=function(){
+        left.onclick=function(){
+            con.removeChild(divs[2]);
+            divs.unshift(divs[2]);divs.pop();
+            con.insertBefore(divs[0],divs[1]);
+            divs[0].style.left=(divs[1].offsetLeft-400)+'px';
+            con.style.left=(leftV+=100)+"%";
+        };
+        right.onclick=function(){
+            console.log(divs);
+            con.style.left=(leftV-=100)+"%";
+            setTimeout(function(){
+                con.removeChild(divs[0]);
+                divs.push(divs[0]);divs.shift();
+                console.log(divs);
+                divs[2].style.left=(divs[1].offsetLeft+400)+"px";
+                con.appendChild(divs[2]);
+            },1000)
+        }
+    }
+</script>
+</body>
+</html>
