@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin:0;padding:0;}
+		#cont{width:600px;
+			height:600px;
+			position:absolute;
+			border:1px solid green;
+			left:0;right:0;top:0;bottom: 0;
+			margin:auto;
+			/*animation-name:cont;*/
+			background-position: center;
+		}
+		#cont,.part{
+			animation-timing-function:linear;
+			animation-duration:0.6s;
+			animation-fill-mode:forwards;
+			background-repeat:no-repeat;
+		}
+		.part{
+			width:50%;
+			height:50%;
+			background-size:200% 200%;
+			position:absolute;
+		}
+		.part1{top:0;left:0;background-position:0 0;}
+		.part2{top:0;left:50%;background-position:100% 0;}
+		.part3{top:50%;left:0;background-position:0% 100%;}
+		.part4{top:50%;left:50%;background-position:100% 100%;}
+
+		.old{background-image:url(images/pic1.jpg);}
+
+		/*.part1.old{animation-name:part1-old;}
+		.part2.old{animation-name:part2-old;}
+		.part3.old{animation-name:part3-old;}
+		.part4.old{animation-name:part4-old;}*/
+
+		@keyframes part1-old{
+			from{background-position:0 0;}
+			to{background-position:0 -100%;}
+		}
+		@keyframes part2-old{
+			from{background-position:100% 0;}
+			to{background-position:200% 0;}
+		}
+		@keyframes part3-old{
+			from{background-position:0 100%;}
+			to{background-position:-100% 100%;}
+		}
+		@keyframes part4-old{
+			from{background-position:100% 100%;}
+			to{background-position:100% 200%;}
+		}
+		@keyframes part2-fan{
+			from{background-position:0 0;}
+			to{background-position:0 -100%;}
+		}
+		@keyframes part1-fan{
+			from{background-position:0 100%;}
+			to{background-position:-100% 100%;}
+		}
+		@keyframes part2-fan{
+			from{background-position:0 0;}
+			to{background-position:0 -100%;}
+		}
+		@keyframes part3-fan{
+			from{background-position:100% 100%;}
+			to{background-position:100% 200%;}
+		}
+		@keyframes part4-fan{
+			from{background-position:100% 0;}
+			to{background-position:200% 0;}
+		}
+		@keyframes cont{
+			from{background-size:200% 200%;}
+			to{background-size:100% 100%;}
+		}
+		#cont span{
+			width:50px;height: 70px;
+			cursor: pointer;
+			font-size: 60px;
+			font-weight:bolder;
+			color:white;
+			position: absolute;
+			z-index:100;
+			top:50%;
+			transform:translateY(-50%);
+			background: rgba(0,0,0,0.1);
+			text-align: center;
+		}
+		span#left{left: 0;}
+		span#right{right: 0}
+	</style>
+	<script>
+		var pics=["url(images/pic1.jpg)","url(images/pic2.jpg)","url(images/pic3.jpg)","url(images/pic4.jpg)"];
+		var current=1;
+		var parts=null;
+		function initParts(){
+			var childs=document.getElementById("cont").getElementsByTagName("div");//集合不是数组
+			parts=Array.prototype.slice.call(childs,0);
+			// var len=div.childs.length;
+			// for(var i=0;i<len;i++){
+			// 	parts.push(childs[i]);//读取document费时 
+			// }
+		}
+		function zhengZhuan(flag){
+			// 显示下一张要显示的图片
+			if(flag){
+				current=current+1>pics.length?1:current+1;
+			}
+			else{
+				current=current-1<1?pics.length:current-1;
+			}
+			// document.getElementById("cont").style.backgroundImage=pics[current-1];
+			// document.getElementById("cont").style.animationName="cont";
+			document.getElementById('cont').style.backgroundImage=pics[current-1];
+			document.getElementById('cont').style.animationName='cont';
+			// part执行动画alert(11);
+
+			for(var i=0;i<parts.length;i++){
+				parts[i].style.animationName="part"+(i+1)+(flag?"-old":"-fan");
+			}
+			// 动画结束 显示当前图片
+			setTimeout(function(){
+				// parts.forEach();
+				document.getElementById("cont").style.animationName="none";
+				for(var i=0;i<parts.length;i++){
+					parts[i].style.backgroundImage=pics[current-1];
+					parts[i].style.animationName="none";
+				}
+			},700);
+		}
+		window.onload=function(){
+			initParts();
+			document.getElementById("right").onclick=function(){
+				zhengZhuan(true);
+			};
+			document.getElementById("left").onclick=function(){
+				zhengZhuan(false);
+			};
+			
+
+
+		};
+	</script>
+</head>
+<body>
+	<div id="cont">
+		<span id="left">&lt;</span><span id="right">&gt;</span>
+		<div class="part part1 old"></div>
+		<div class="part part2 old"></div>
+		<div class="part part3 old"></div>
+		<div class="part part4 old"></div>
+	</div>
+	
+</body>
+</html>
